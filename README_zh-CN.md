@@ -1,4 +1,4 @@
-# LeagueHub - iRacing 联赛排行榜
+# LeagueHub
 
 [English](README.md) | **简体中文**
 
