@@ -1,4 +1,4 @@
-# LeagueHub - iRacing League Standings
+# LeagueHub
 
 **English** | [简体中文](README_zh-CN.md)
 
