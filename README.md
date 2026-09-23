@@ -1,62 +1,64 @@
-# LeagueHub - iRacing 联赛排行榜
+# LeagueHub - iRacing League Standings
 
-LeagueHub 是一个开箱即用的 iRacing 联赛网站模板。它基于 Astro 构建静态页面：配置站点和赛事、放入 iRacing 比赛结果后，即可生成自己的联赛网站，无需为每场比赛编写页面。
+**English** | [简体中文](README_zh-CN.md)
 
-模板已实现：
+LeagueHub is a ready-to-use website template for iRacing leagues. Built with Astro, it generates a static site from your league configuration and iRacing race results. You can publish your own league site without building a page for every race.
 
-- **联赛首页**：展示系列赛、最新赛果和接下来的比赛。
-- **系列赛页面**：展示赛程、锦标赛积分榜、最新比赛结果及可选的赛事介绍。
-- **比赛结果页面**：分别展示正赛、排位赛和练习赛成绩，并统计杆位、最快圈等数据。
-- **自动计算积分**：按可配置的积分规则汇总车手成绩，支持名次调整、扣分和取消资格等处罚。
-- **多赛事与静态构建**：新增系列赛只需添加配置和数据；构建时自动生成导航及对应页面。
+The template includes:
 
-仓库附带已完赛和未开赛两种虚拟示例，安装依赖后即可预览。要用于自己的联赛，请替换示例赛事，并修改站点信息、积分规则和比赛数据。
+- **League home page:** Shows series, recent results, and upcoming races.
+- **Series pages:** Show schedules, championship standings, the latest race results, and optional series information.
+- **Race result pages:** Show race, qualifying, and practice results, including pole position and fastest lap data.
+- **Automatic points calculation:** Applies configurable scoring rules and supports position penalties, points deductions, and disqualifications.
+- **Multiple series and static builds:** Add a series by adding configuration and data; navigation and pages are generated at build time.
 
-## 快速开始
+The repository includes fictional examples for a completed series and an upcoming series, so you can preview the site immediately after installing dependencies. To use it for your league, replace the examples and update the site settings, scoring rules, and race data.
 
-需要 Node.js 22.12.0 或更新版本。
+## Quick start
+
+Requires Node.js 22.12.0 or later.
 
 ```bash
 npm install
 npm run dev
 ```
 
-打开终端输出的本地地址，即可查看示例网站。准备自己的联赛时，先修改 `config/site.ts` 中的站点信息，再参照 `series/demo-gt3/` 或 `series/demo-upcoming/` 添加赛事配置和赛程；比赛结束后放入原始 iRacing 结果文件，并在对应轮次关联它。各文件的作用见下文。
+Open the local URL shown in your terminal to see the example site. To set up your league, first edit the site settings in `config/site.ts`. Then use `series/demo-gt3/` or `series/demo-upcoming/` as a starting point for your series configuration and schedule. After a race, add its original iRacing result file and reference it from the corresponding round. The files involved are described below.
 
-运行检查并构建静态网站：
+Check and build the static site:
 
 ```bash
 npm run check
 npm run build
 ```
 
-构建产物位于 `dist/`。可用 `npm run preview` 在本地预览构建结果。`npm run build` 本身也会先执行 Astro 检查。
+The build output is in `dist/`. Run `npm run preview` to preview the built site locally. `npm run build` also runs the Astro checks before building.
 
-## 数据与配置放在哪里
+## Data and configuration
 
-| 路径 | 用途 |
+| Path | Purpose |
 | --- | --- |
-| `config/site.ts` | 站点名称、Logo、赛季、语言区域、重点色及表格默认展示列 |
-| `config/points.ts` | 共享的名次积分、杆位和最快圈奖励规则 |
-| `series/<slug>/config.ts` | 系列赛名称、路由、积分规则及可选的展示覆盖和 Logo |
-| `series/<slug>/series.json` | 车辆组别 `carClass` 与按顺序排列的赛程 `rounds` |
-| `series/<slug>/info.md` | 可选的赛事介绍和规则说明，仅用于展示 |
-| `series/<slug>/eventresult-*.json` | 未经修改的 iRacing 比赛结果 API 响应 |
-| `series/<slug>/penalties/<roundId>.json` | 可选的该轮赛事仲裁决定 |
+| `config/site.ts` | Site name, logo, season, locale, accent color, and default table columns |
+| `config/points.ts` | Shared scoring rules for finishing positions, pole position, and fastest lap |
+| `series/<slug>/config.ts` | Series name, route, scoring system, and optional display overrides and logo |
+| `series/<slug>/series.json` | Car class (`carClass`) and ordered schedule (`rounds`) |
+| `series/<slug>/info.md` | Optional series introduction and rules, displayed on the site |
+| `series/<slug>/eventresult-*.json` | Unmodified iRacing race result API responses |
+| `series/<slug>/penalties/<roundId>.json` | Optional stewarding decisions for a round |
 
-系列赛的 `config.ts` 默认导出配置，包含 `id`、`name`、`shortName`、`slug` 和 `pointsSystem`；`slug` 必须与目录名相同，`pointsSystem` 必须引用 `config/points.ts` 中的键。可用 `display` 覆盖全站表格展示选项。比赛结果行不应手工写入配置。
+Each series `config.ts` must export a default configuration with `id`, `name`, `shortName`, `slug`, and `pointsSystem`. The `slug` must match the directory name, and `pointsSystem` must reference a key in `config/points.ts`. Use `display` to override the site-wide table options. Do not enter race result rows manually in the configuration.
 
-Logo 资源放在 `public/series/`，在系列赛配置中使用站点根路径（如 `logo: '/series/demo-gt3.svg'`）。它会显示在首页赛事列表和系列赛页头；未配置时显示文字。全站顶部导航始终使用文字。
+Put series logos in `public/series/` and reference them with a site-root path, such as `logo: '/series/demo-gt3.svg'`. A logo appears in the home page series list and at the top of the series page; if none is configured, text is shown instead. The main navigation always uses text.
 
-`info.md` 可写联盟宗旨、报名条件、赛制、车辆、奖励、直播和规则。存在该文件时，系列赛页面自动显示“赛事信息”及页内导航。用于计算的积分规则或条件仍须写在结构化配置中，不能只写在介绍文字里。
+Use `info.md` for the league's purpose, entry requirements, format, cars, prizes, broadcasts, and rules. When the file exists, the series page displays a “Series information” section and a link to it in the page navigation. Scoring rules and other conditions used in calculations must still be defined in structured configuration rather than only in prose.
 
-### 赛程与结果文件
+### Schedule and result files
 
-`series.json` 中每轮可通过 `resultFile` 引用同目录下的原始结果文件，填写文件名时**不带 `.json`**。例如：
+Each round in `series.json` can reference an original result file in the same directory through `resultFile`. Omit the `.json` extension from the value. For example:
 
 ```json
 {
-  "carClass": "DEMO GT3 · 虚拟数据",
+  "carClass": "DEMO GT3 · Fictional data",
   "rounds": [
     {
       "id": "round-1",
@@ -71,44 +73,44 @@ Logo 资源放在 `public/series/`，在系列赛配置中使用站点根路径�
 }
 ```
 
-未举行的轮次不要填写 `resultFile`；赛程中第一轮没有结果的比赛会被视为下一场比赛。替换或增加结果文件后，重新构建即可更新正式成绩、积分榜、赛事进度和首页内容，无需手工整理结果。
+Leave out `resultFile` for rounds that have not taken place. The first scheduled round without a result is treated as the next race. After adding or replacing a result file, rebuild the site to update the official results, standings, series progress, and home page automatically.
 
-### 处罚文件
+### Penalty files
 
-仲裁决定放在 `series/<slug>/penalties/<roundId>.json`，原始结果文件保持不变。支持名次后退、扣除积分和取消资格；完整 JSON 格式见 [赛事处罚说明](series/penalties.md)。
+Put stewarding decisions in `series/<slug>/penalties/<roundId>.json` and leave the original result file unchanged. Position drops, points deductions, and disqualifications are supported. See the [penalty file reference](series/penalties.md) for the full JSON format (in Chinese).
 
-名次调整及取消资格在计算积分前生效。取消资格的车手该轮得零分（包括杆位和最快圈奖励），其圈速也不参与官方最快圈及相应统计。
+Position changes and disqualifications take effect before points are calculated. A disqualified driver scores zero points for that round, including pole position and fastest lap bonuses; their lap times are also excluded from the official fastest lap statistics.
 
-## 管理系列赛
+## Managing series
 
-### 添加
+### Add a series
 
-1. 新建 `series/<slug>/`，参照现有赛事添加默认导出的 `config.ts`，确保 `slug` 与目录名一致。需要 Logo 时，将资源放入 `public/series/` 并在配置中引用。
-2. 添加 `series.json`，填写 `carClass` 和 `rounds`；需要介绍时添加 `info.md`。
-3. 将已完成比赛的原始 `eventresult-*.json` 放入该目录，并在对应轮次设置 `resultFile`。如有处罚，再添加 `penalties/<roundId>.json`。
-4. 运行 `npm run build`，检查生成的页面。
+1. Create `series/<slug>/` and use an existing series as a guide for its default-exported `config.ts`. Make sure `slug` matches the directory name. If you need a logo, put it in `public/series/` and reference it from the configuration.
+2. Add `series.json` with `carClass` and `rounds`. Add `info.md` if you want an introduction.
+3. Put the original `eventresult-*.json` files for completed races in the series directory and set `resultFile` on the corresponding rounds. Add `penalties/<roundId>.json` files if needed.
+4. Run `npm run build` and inspect the generated pages.
 
-`src/lib/data.ts` 自动发现 `series/*/config.ts`；页面还会读取同目录可选的 `info.md`。导航、首页赛事列表、最新赛果、后续比赛、系列赛页和已有比赛的结果页均随构建生成，无需修改全局配置。
+`src/lib/data.ts` automatically discovers `series/*/config.ts`; pages also read an optional `info.md` from the same directory. Navigation, the home page series list, recent results, upcoming races, series pages, and result pages for completed races are generated during the build without editing global configuration.
 
-### 删除或归档
+### Remove or archive a series
 
-删除对应的 `series/<slug>/` 目录，或将其移到 `series/` 之外进行归档。下次构建时，该赛事的页面、首页内容和导航入口不再生成。
+Delete its `series/<slug>/` directory or move it outside `series/` to archive it. On the next build, that series disappears from the generated pages, home page, and navigation.
 
-### 随仓库提供的示例
+### Included examples
 
-- `series/demo-gt3/`：**DEMO / 虚拟数据**，包含 12 轮模拟结果、每轮三个场次及独立处罚文件，用于验证页面、积分与处罚流程，不代表真实赛事。
-- `series/demo-upcoming/`：**DEMO / 虚拟数据**，只有 6 轮已公布赛程，没有结果文件。用于验证未开赛时的进度、下一场比赛、空积分榜和“即将举行”赛程；此时不生成结果页或“比赛结果”页内导航。
+- `series/demo-gt3/`: **DEMO / fictional data** with 12 simulated rounds, three sessions per round, and separate penalty files. It demonstrates the pages, standings, and penalty workflow and does not represent real races.
+- `series/demo-upcoming/`: **DEMO / fictional data** with six scheduled rounds and no results. It demonstrates series progress before the first race, the next race, empty standings, and the upcoming schedule. No result pages or “Race results” page navigation are generated for this series.
 
-## 结果如何生成
+## How results are generated
 
 ```text
-原始 iRacing JSON → 适配器 → 处罚 → 正式正赛结果 → 积分 → 积分榜
+Original iRacing JSON → adapter → penalties → official race results → points → standings
 ```
 
-`src/lib/iracing-adapter.ts` 解析 Practice（练习赛）、Qualifying（排位赛）和 Race（正赛）。只有正赛参与处罚、锦标赛积分及官方最快圈统计；排位赛数据还用于确定正赛杆位。练习赛和排位赛不会改变当前轮次或下一场比赛的判定。
+`src/lib/iracing-adapter.ts` parses Practice, Qualifying, and Race sessions. Only Race sessions affect penalties, championship points, and official fastest lap statistics. Qualifying results are also used to determine the race pole sitter. Practice and qualifying results do not affect which round is current or which race is next.
 
-适配器将 iRacing 的万分之一秒转换为显示文字和毫秒，将从零开始的有效名次转换为从一开始的名次（`-1` 仍表示无有效名次）。正赛保留发车和完赛名次、组别名次、领跑圈数、状态及原始退赛原因；计时场次保留车手、车号、赛车、最快圈和与场次最快圈的差距，无有效圈速显示“—”。车手以 iRacing `cust_id` 标识。
+The adapter converts iRacing time values from ten-thousandths of a second into display text and milliseconds. It converts valid zero-based positions to one-based positions (`-1` still means no valid position). Race results retain starting and finishing positions, class positions, laps led, status, and the original retirement reason. Timed sessions retain the driver, car number, car, fastest lap, and gap to the session's fastest lap; an invalid lap time is displayed as “—”. Drivers are identified by their iRacing `cust_id`.
 
-`getStaticPaths()` 根据自动发现的配置和赛程生成页面。默认结果地址 `/racing/<slug>/results/<roundId>` 展示正赛；有相应场次数据时，另生成 `/qualifying` 和 `/practice` 子页面。三个场次共用比赛页头与切换导航，正赛表还显示发车位。
+`getStaticPaths()` generates pages from the discovered configurations and schedules. The default result route, `/racing/<slug>/results/<roundId>`, shows the race. When the corresponding session data exists, `/qualifying` and `/practice` subpages are also generated. The three session pages share a header and navigation; the race table also shows starting positions.
 
-主要实现位于 `src/lib/`：`data.ts` 串联数据加载，`penalties.ts` 处理处罚，`points.ts` 计算积分，`standings.ts` 汇总积分榜。`src/components/` 提供共用的导航、卡片、表格和结果页区块；`src/pages/` 定义首页、系列赛页及结果页路由。页面组件不直接依赖 iRacing API 字段。
+The main implementation lives in `src/lib/`: `data.ts` loads data, `penalties.ts` applies penalties, `points.ts` calculates points, and `standings.ts` builds standings. `src/components/` contains shared navigation, cards, tables, and result sections; `src/pages/` defines the home, series, and result routes. Page components do not depend directly on iRacing API fields.
