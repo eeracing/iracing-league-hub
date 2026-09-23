@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc">
+  <title id="title">EE Racing avatar</title>
+  <desc id="desc">White EE monogram on solid Cobalt Blue (#1747D1) background.</desc>
+
+  <!-- Solid deep-blue background -->
+  <rect width="1000" height="1000" fill="#1747D1"/>
+
+  <!-- Refined EE mark -->
+  <g fill="#FFFFFF" transform="translate(77.3 154.4) scale(39.5)">
+    <!-- Left E -->
+    <path d="M8.53 11.62L3.64 11.62L3.64 9.72L8.11 9.72L8.11 7.76L3.64 7.76L3.64 5.88L8.39 5.88L8.39 3.92L1.12 3.92L1.12 13.58L8.53 13.58Z"/>
+
+    <!-- Slim center divider -->
+    <path d="M11.40 14.80L11.40 2.70L10.20 2.70L10.20 14.80Z"/>
+
+    <!-- Right E -->
+    <path d="M20.29 11.62L15.40 11.62L15.40 9.72L19.87 9.72L19.87 7.76L15.40 7.76L15.40 5.88L20.15 5.88L20.15 3.92L12.88 3.92L12.88 13.58L20.29 13.58Z"/>
+  </g>
+</svg>

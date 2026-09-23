@@ -1,0 +1,35 @@
+---
+import type { SeriesView } from '../types';
+interface Props { series: SeriesView; limit?: number }
+const { series, limit } = Astro.props;
+const standings = limit ? series.standings.slice(0, limit) : series.standings;
+const completedRounds = series.data.rounds.filter((round) => series.races.some((race) => race.roundId === round.id));
+---
+<div class="table-scroll">
+  <table class="standings-table">
+    <thead><tr>
+      <th class="pos">排名</th>
+      {series.display.carNumber && <th class="number">车号</th>}
+      <th class="driver">车手</th>
+      {series.display.car && <th class="car">赛车</th>}
+      {completedRounds.map((round) => <th class="round">第{round.round}轮</th>)}
+      {series.display.wins && <th>分站冠军</th>}
+      {series.display.poles && <th>杆位</th>}
+      {series.display.fastestLaps && <th>最快圈</th>}
+      <th class="points">积分</th>
+    </tr></thead>
+    <tbody>
+      {standings.map((standing) => <tr>
+        <td class="pos"><strong>{standing.position}</strong></td>
+        {series.display.carNumber && <td class="number">#{standing.carNumber}</td>}
+        <td class="driver"><strong>{standing.driver}</strong></td>
+        {series.display.car && <td class="car">{standing.car}</td>}
+        {completedRounds.map((round) => <td class="round">{standing.roundPoints[round.id] ?? '—'}</td>)}
+        {series.display.wins && <td>{standing.wins}</td>}
+        {series.display.poles && <td>{standing.poles}</td>}
+        {series.display.fastestLaps && <td>{standing.fastestLaps}</td>}
+        <td class="points"><strong>{standing.points}</strong></td>
+      </tr>)}
+    </tbody>
+  </table>
+</div>

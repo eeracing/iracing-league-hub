@@ -1,0 +1,32 @@
+---
+import type { SeriesView } from '../types';
+interface Props { series: SeriesView }
+const { series } = Astro.props;
+const leader = series.standings[0];
+const totalRounds = series.data.rounds.length;
+const progress = totalRounds ? Math.min(100, Math.max(0, series.currentRound / totalRounds * 100)) : 0;
+---
+<a class="championship-card" href={`/racing/${series.config.slug}`}>
+  <div class="championship-card-top">
+    {series.config.logo && <div class="championship-card-logo"><img src={series.config.logo} alt="" width="136" height="136" loading="lazy" /></div>}
+    <div class="championship-card-identity">
+      <span class="championship-card-kicker">锦标赛 <span> / {series.config.shortName}</span></span>
+      <h3>{series.config.name}</h3>
+      <p>{series.data.carClass}</p>
+    </div>
+  </div>
+  <div class="championship-card-details">
+    <div class="championship-card-progress">
+      <div class="championship-card-progress-label">
+        <span>赛程进度</span>
+        <strong>{series.currentRound}<small> / {totalRounds}</small></strong>
+      </div>
+      <div class="championship-card-progress-track" aria-hidden="true"><span style={`width: ${progress}%`}></span></div>
+    </div>
+    <div class="championship-card-standing">
+      <div><span>积分榜首</span><strong>{leader?.driver ?? '待定'}</strong></div>
+      <div><span>积分</span><strong>{leader?.points ?? '—'}</strong></div>
+    </div>
+  </div>
+  <div class="championship-card-footer">查看锦标赛 <span aria-hidden="true">→</span></div>
+</a>

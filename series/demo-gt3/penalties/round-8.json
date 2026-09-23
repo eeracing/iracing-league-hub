@@ -1,0 +1,9 @@
+{
+  "penalties": [
+    {
+      "type": "disqualification",
+      "driverId": "99000010",
+      "reason": "DEMO: technical infringement"
+    }
+  ]
+}

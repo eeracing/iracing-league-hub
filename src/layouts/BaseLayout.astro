@@ -1,0 +1,79 @@
+---
+import { config } from '../../config/site';
+import Navigation from '../components/Navigation.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = `${config.site.name} — ${config.site.tagline}`,
+} = Astro.props;
+const pageTitle = title ? `${title} — ${config.site.name}` : `${config.site.name} — ${config.site.tagline}`;
+---
+
+<!doctype html>
+<html lang={config.site.locale} style={`--accent: ${config.site.accent}`}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f3f2ee" />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      (() => {
+        const key = 'theme';
+        const root = document.documentElement;
+        const system = window.matchMedia('(prefers-color-scheme: dark)');
+        let saved;
+        try { saved = localStorage.getItem(key); } catch { /* Storage may be unavailable. */ }
+        const selected = saved === 'light' || saved === 'dark' ? saved : null;
+
+        const apply = (theme) => {
+          root.dataset.theme = theme;
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#17191e' : '#f3f2ee');
+          const button = document.querySelector('[data-theme-toggle]');
+          if (button) {
+            const next = theme === 'dark' ? '浅色' : '深色';
+            button.setAttribute('aria-label', `切换至${next}模式`);
+            button.setAttribute('title', `切换至${next}模式`);
+            button.setAttribute('aria-pressed', String(theme === 'dark'));
+          }
+        };
+
+        apply(selected ?? (system.matches ? 'dark' : 'light'));
+        system.addEventListener('change', (event) => {
+          if (!selected && !root.dataset.themePreference) apply(event.matches ? 'dark' : 'light');
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+          apply(root.dataset.theme);
+          document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
+            const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            root.dataset.themePreference = next;
+            try { localStorage.setItem(key, next); } catch { /* Keep the current page choice. */ }
+            apply(next);
+          });
+        });
+      })();
+    </script>
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href={config.site.logo} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <Navigation />
+    <main><slot /></main>
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <div>
+          <img src={config.site.logo} alt="" width="32" height="32" />
+          <span>{config.site.name}</span>
+        </div>
+        <p>{config.season.name} · Powered by <a href="https://eeracing.com/">{config.site.name}</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

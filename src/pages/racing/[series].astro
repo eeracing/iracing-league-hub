@@ -1,0 +1,66 @@
+---
+import type { MarkdownInstance } from 'astro';
+import { config } from '../../../config/site';
+import RaceResultsTable from '../../components/RaceResultsTable.astro';
+import ScheduleTable from '../../components/ScheduleTable.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import StandingsTable from '../../components/StandingsTable.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getSeriesConfigs, getSeriesView } from '../../lib/data';
+
+const infoModules = import.meta.glob<MarkdownInstance<Record<string, unknown>>>('../../../series/*/info.md', { eager: true });
+
+export function getStaticPaths() {
+  return getSeriesConfigs().map((series) => ({ params: { series: series.slug }, props: { seriesConfig: series } }));
+}
+
+const { seriesConfig } = Astro.props;
+const series = getSeriesView(seriesConfig);
+const infoPath = `../../../series/${series.config.slug}/info.md`;
+const SeriesInfo = Object.hasOwn(infoModules, infoPath) ? infoModules[infoPath].Content : undefined;
+---
+<BaseLayout title={series.config.name} description={`${series.config.name} 的锦标赛积分榜、比赛结果与赛程。`}>
+  <section class="page-header championship-header">
+    <div class="shell">
+      <div class="championship-heading">
+        {series.config.logo && <img class="championship-logo" src={series.config.logo} alt="" width="88" height="88" />}
+        <div>
+          <h1>{series.config.name}</h1>
+          <p>{config.season.name} <span>·</span> {series.data.carClass}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="section-nav" aria-label="锦标赛页面导航">
+    <div class="shell">
+      <a href="#standings">积分榜</a>
+      {series.latestRace && series.latestRound && <a href="#results">比赛结果</a>}
+      <a href="#schedule">赛程</a>
+      {SeriesInfo && <a href="#info">赛事信息</a>}
+    </div>
+  </nav>
+
+  <section class="content-section shell" id="standings">
+    <SectionHeading title="锦标赛积分榜" />
+    {series.standings.length ? <StandingsTable series={series} /> : <p class="empty-state">暂无成绩，首场比赛结束后公布积分榜。</p>}
+  </section>
+
+  {series.latestRace && series.latestRound && <section class="content-section section-muted" id="results">
+    <div class="shell">
+    <SectionHeading eyebrow={`第 ${series.latestRound.round} 轮 · ${series.latestRound.track}`} title="最新比赛结果" link={`/racing/${series.config.slug}/results/${series.latestRound.id}`} linkLabel="查看完整结果" />
+    <RaceResultsTable race={series.latestRace} showIncidents={series.display.incidents} />
+    </div>
+  </section>}
+
+  <section class="content-section shell" id="schedule">
+    <SectionHeading title="赛程" /><ScheduleTable series={series} />
+  </section>
+
+  {SeriesInfo && <section class="content-section section-muted" id="info">
+    <div class="shell">
+      <SectionHeading title="赛事信息" />
+      <div class="series-info"><SeriesInfo /></div>
+    </div>
+  </section>}
+</BaseLayout>

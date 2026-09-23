@@ -1,0 +1,53 @@
+{
+  "carClass": "DEMO GT4 · 虚拟数据",
+  "rounds": [
+    {
+      "id": "round-1",
+      "round": 1,
+      "name": "DEMO 第 1 轮 · Laguna Seca",
+      "track": "WeatherTech Raceway Laguna Seca",
+      "layout": "Full Course",
+      "date": "2026-10-04T10:00:00Z"
+    },
+    {
+      "id": "round-2",
+      "round": 2,
+      "name": "DEMO 第 2 轮 · Road America",
+      "track": "Road America",
+      "layout": "Full Course",
+      "date": "2026-10-11T10:00:00Z"
+    },
+    {
+      "id": "round-3",
+      "round": 3,
+      "name": "DEMO 第 3 轮 · Brands Hatch",
+      "track": "Brands Hatch Circuit",
+      "layout": "Grand Prix",
+      "date": "2026-10-18T10:00:00Z"
+    },
+    {
+      "id": "round-4",
+      "round": 4,
+      "name": "DEMO 第 4 轮 · Daytona",
+      "track": "Daytona International Speedway",
+      "layout": "Road Course",
+      "date": "2026-10-25T10:00:00Z"
+    },
+    {
+      "id": "round-5",
+      "round": 5,
+      "name": "DEMO 第 5 轮 · Interlagos",
+      "track": "Autódromo José Carlos Pace",
+      "layout": "Grand Prix",
+      "date": "2026-11-01T10:00:00Z"
+    },
+    {
+      "id": "round-6",
+      "round": 6,
+      "name": "DEMO 第 6 轮 · Spa",
+      "track": "Circuit de Spa-Francorchamps",
+      "layout": "Grand Prix",
+      "date": "2026-11-08T10:00:00Z"
+    }
+  ]
+}

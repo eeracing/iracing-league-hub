@@ -1,0 +1,65 @@
+---
+import RaceResultsTable from './RaceResultsTable.astro';
+import TimedSessionTable from './TimedSessionTable.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSeriesView } from '../lib/data';
+import { formatDate } from '../lib/format';
+import { getFastestLap } from '../lib/points';
+import type { SeriesConfig } from '../types';
+
+type SessionKind = 'race' | 'qualifying' | 'practice';
+
+interface Props {
+  seriesConfig: SeriesConfig;
+  roundId: string;
+  sessionKind: SessionKind;
+}
+
+const { seriesConfig, roundId, sessionKind } = Astro.props;
+const series = getSeriesView(seriesConfig);
+const race = series.races.find((item) => item.roundId === roundId)!;
+const round = series.data.rounds.find((item) => item.id === roundId)!;
+const sessions = series.eventSessions[roundId];
+const timedSession = sessionKind === 'race' ? undefined : sessions[sessionKind];
+const fastest = getFastestLap(race);
+const sessionName = sessionKind === 'race' ? '正赛' : sessionKind === 'qualifying' ? '排位赛' : '练习赛';
+const resultUrl = `/racing/${series.config.slug}/results/${round.id}`;
+const tabs = [
+  { kind: 'race', label: '正赛', href: resultUrl },
+  { kind: 'qualifying', label: '排位赛', href: `${resultUrl}/qualifying` },
+  { kind: 'practice', label: '练习赛', href: `${resultUrl}/practice` },
+] as const;
+---
+<BaseLayout title={sessionKind === 'race' ? `${round.name} 比赛结果` : `${round.name} ${sessionName}结果`}>
+  <section class="result-hero">
+    <div class="shell">
+      <a class="back-link" href={`/racing/${series.config.slug}`}>← {series.config.name}</a>
+      <p class="eyebrow">第 {round.round} 轮 · {sessionKind === 'race' ? '正式比赛结果' : `${sessionName}结果`}</p>
+      <h1>{round.name}</h1>
+      <p>{round.track} · {round.layout}</p>
+      <div class="result-meta">
+        <span>{formatDate(round.date, { weekday: 'long' })}</span>
+        {race.sessionId && <span>赛事编号 #{race.sessionId}</span>}
+        {race.subsessionId && <span>场次编号 #{race.subsessionId}</span>}
+      </div>
+    </div>
+  </section>
+  <nav class="session-nav" aria-label="比赛场次导航">
+    <div class="shell">
+      {tabs.map((tab) => sessions[tab.kind] && <a href={tab.href} class:list={{ active: sessionKind === tab.kind }} aria-current={sessionKind === tab.kind ? 'page' : undefined}>{tab.label}</a>)}
+    </div>
+  </nav>
+  {sessionKind === 'race' && <div class="winner-band">
+    <div class="shell">
+      <div><span>分站冠军</span><strong>{race.results[0].driver}</strong><small>#{race.results[0].carNumber} · {race.results[0].car}</small></div>
+      <div><span>估算比赛用时</span><strong>{race.results[0].time}</strong><small>估算值 · 完成 {race.results[0].laps} 圈</small></div>
+      <div class="fastest-stat"><span>最快圈</span><strong>{fastest?.bestLap ?? '—'}</strong>{fastest && <small>{fastest.driver}</small>}</div>
+    </div>
+  </div>}
+  <section class="content-section shell">
+    <header class="section-heading"><div><p class="eyebrow">{sessionKind === 'race' ? '正式成绩' : '场次成绩'}</p><h2>{sessionKind === 'race' ? '比赛结果' : `${sessionName}结果`}</h2></div></header>
+    {sessionKind === 'race'
+      ? <RaceResultsTable race={race} showIncidents={series.display.incidents} />
+      : timedSession && <TimedSessionTable session={timedSession} gapLabel={sessionKind === 'qualifying' ? '与杆位差距' : '与全场最快差距'} />}
+  </section>
+</BaseLayout>

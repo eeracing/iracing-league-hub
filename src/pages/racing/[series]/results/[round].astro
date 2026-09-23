@@ -1,0 +1,17 @@
+---
+import ResultPage from '../../../../components/ResultPage.astro';
+import { getSeriesConfigs, getSeriesView } from '../../../../lib/data';
+
+export function getStaticPaths() {
+  return getSeriesConfigs().flatMap((seriesConfig) => {
+    const view = getSeriesView(seriesConfig);
+    return view.races.map((race) => ({
+      params: { series: seriesConfig.slug, round: race.roundId },
+      props: { seriesConfig, roundId: race.roundId },
+    }));
+  });
+}
+
+const { seriesConfig, roundId } = Astro.props;
+---
+<ResultPage seriesConfig={seriesConfig} roundId={roundId} sessionKind="race" />

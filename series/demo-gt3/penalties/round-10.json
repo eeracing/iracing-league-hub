@@ -1,0 +1,10 @@
+{
+  "penalties": [
+    {
+      "type": "points",
+      "driverId": "99000001",
+      "points": 8,
+      "reason": "DEMO: post-race points penalty"
+    }
+  ]
+}

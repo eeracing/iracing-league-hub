@@ -1,0 +1,10 @@
+{
+  "penalties": [
+    {
+      "type": "position",
+      "driverId": "99000003",
+      "positions": 2,
+      "reason": "DEMO: avoidable contact"
+    }
+  ]
+}

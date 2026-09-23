@@ -1,0 +1,55 @@
+---
+import { config } from '../../config/site';
+import SeriesCard from '../components/SeriesCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllSeries } from '../lib/data';
+import { formatDate } from '../lib/format';
+import { getFastestLap } from '../lib/points';
+
+const seriesList = getAllSeries();
+const latestResults = seriesList
+  .filter((series) => series.latestRace && series.latestRound)
+  .sort((a, b) => new Date(b.latestRound!.date).getTime() - new Date(a.latestRound!.date).getTime());
+const nextRaces = seriesList
+  .filter((series) => series.nextRound)
+  .sort((a, b) => new Date(a.nextRound!.date).getTime() - new Date(b.nextRound!.date).getTime());
+---
+<BaseLayout description={`${config.site.name} 模拟赛车锦标赛积分榜、比赛结果与赛程。`}>
+  <section class="content-section home-championship shell">
+    <SectionHeading as="h1" eyebrow={`${config.site.name} · ${config.season.name}`} title="锦标赛" />
+    <div class="championship-grid">
+      {seriesList.map((series) => <SeriesCard series={series} />)}
+    </div>
+  </section>
+
+  <section class="content-section compact-section section-muted">
+    <div class="shell">
+      <SectionHeading title="最新赛果" />
+      <div class="editorial-list">
+        {latestResults.map((series) => {
+          const winner = series.latestRace!.results[0];
+          const fastest = getFastestLap(series.latestRace);
+          return <a class="editorial-row" href={`/racing/${series.config.slug}/results/${series.latestRound!.id}`}>
+            <div class="event-series">{series.config.shortName}</div>
+            <div class="event-main"><span>第 {series.latestRound!.round} 轮 · {formatDate(series.latestRound!.date)}</span><h3>{series.latestRound!.name}</h3><p>{series.latestRound!.track}</p></div>
+            <div class="event-data"><span>分站冠军</span><strong>{winner.driver}</strong></div>
+            <div class="event-data"><span>最快圈</span><strong>{fastest?.bestLap ?? '—'}</strong></div>
+            <span class="row-arrow">→</span>
+          </a>;
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section compact-section shell">
+    <SectionHeading title="接下来举行" />
+    <div class="next-races-list">
+      {nextRaces.length ? nextRaces.map((series) => <a class="next-race-row" href={`/racing/${series.config.slug}`}>
+        <time datetime={series.nextRound!.date}>{formatDate(series.nextRound!.date, { weekday: 'short' })}</time>
+        <span><strong>{series.nextRound!.name}</strong><small>{series.config.name} · 第 {series.nextRound!.round} 轮</small></span>
+        <span class="track">{series.nextRound!.track}</span><span class="row-arrow">→</span>
+      </a>) : <p class="empty-state">目前没有已安排的后续比赛。</p>}
+    </div>
+  </section>
+</BaseLayout>

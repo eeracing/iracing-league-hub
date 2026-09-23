@@ -1,0 +1,52 @@
+---
+import { getFastestLap } from '../lib/points';
+import type { RacePenalty, ScoredRace } from '../types';
+interface Props { race: ScoredRace; showIncidents?: boolean; limit?: number }
+const { race, showIncidents = false, limit } = Astro.props;
+const fastest = getFastestLap(race);
+const results = limit ? race.results.slice(0, limit) : race.results;
+
+function penaltyValue(penalty: RacePenalty): string {
+  if (penalty.type === 'position') {
+    return `后退 ${penalty.positions} 位`;
+  }
+  if (penalty.type === 'points') {
+    return `锦标赛积分扣除 ${penalty.points} 分`;
+  }
+  return '取消资格';
+}
+
+function penaltyLabel(penalty: RacePenalty): string {
+  if (penalty.type === 'position') return '名次处罚';
+  if (penalty.type === 'points') return '积分处罚';
+  return '赛事取消资格';
+}
+---
+<div class="table-scroll">
+  <table class="results-table">
+    <thead><tr><th class="pos">排名</th><th class="driver">车手</th><th>发车位</th><th>赛车</th><th>圈数</th><th>估算用时 / 差距</th><th>最快圈</th>{showIncidents && <th>事故次数</th>}</tr></thead>
+    <tbody>{results.map((result) => {
+      const penalties = race.penalties.filter((penalty) => penalty.driverId === result.driverId);
+      const hasPositionPenalty = penalties.some((penalty) => penalty.type === 'position');
+      return <tr class:list={{ 'has-penalty': penalties.length > 0 }}>
+        <td class="pos">
+          <strong>{result.status === 'disqualified' ? '取消资格' : result.position > 0 ? result.position : '—'}</strong>
+          {hasPositionPenalty && <small class="position-adjustment">原第 {result.finishPosition} 名</small>}
+        </td>
+        <td class="driver">
+          <div><span class="car-number">#{result.carNumber}</span><strong>{result.driver}</strong></div>
+          {penalties.length > 0 && <div class="penalty-list">
+            {penalties.map((penalty) => <span class="penalty-note">
+              <strong>{penaltyLabel(penalty)}</strong>
+              <span>{penaltyValue(penalty)}</span>
+              <span class="penalty-reason">{penalty.reason ?? '未提供原因'}</span>
+            </span>)}
+          </div>}
+        </td>
+        <td>{result.startPosition > 0 ? result.startPosition : '—'}</td><td class="car">{result.car}</td><td>{result.laps}</td><td>{result.status === 'dnf' || result.status === 'disqualified' ? result.reasonOut : result.position === 1 ? result.time : result.gap}</td>
+        <td class:list={['lap-time', { fastest: fastest?.driverId === result.driverId }]}>{result.bestLap}{fastest?.driverId === result.driverId && <span class="fl-badge">全场最快</span>}</td>
+        {showIncidents && <td>{result.incidents}</td>}
+      </tr>;
+    })}</tbody>
+  </table>
+</div>

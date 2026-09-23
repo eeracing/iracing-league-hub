@@ -1,0 +1,10 @@
+{
+  "penalties": [
+    {
+      "type": "position",
+      "driverId": "99000004",
+      "positions": 3,
+      "reason": "DEMO: track-limits penalty"
+    }
+  ]
+}

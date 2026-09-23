@@ -1,0 +1,26 @@
+---
+import { formatDate } from '../lib/format';
+import type { SeriesView } from '../types';
+interface Props { series: SeriesView }
+const { series } = Astro.props;
+const completed = new Set(series.races.map((race) => race.roundId));
+---
+<div class="schedule-list">
+  {series.data.rounds.map((round) => {
+    const isComplete = completed.has(round.id);
+    const Row = isComplete ? 'a' : 'article';
+    return <Row
+      class:list={['schedule-row', { complete: isComplete }]}
+      href={isComplete ? `/racing/${series.config.slug}/results/${round.id}` : undefined}
+    >
+      <div class="round-number"><span>轮次</span><strong>{String(round.round).padStart(2, '0')}</strong></div>
+      <div class="round-info"><h3>{round.name}</h3><p>{round.track} <span>·</span> {round.layout}</p></div>
+      <time datetime={round.date}>{formatDate(round.date, { weekday: 'short' })}</time>
+      <div class="round-action">
+        {isComplete
+          ? <span class="result-label">查看结果 <span>→</span></span>
+          : <span class="upcoming">即将举行</span>}
+      </div>
+    </Row>;
+  })}
+</div>
