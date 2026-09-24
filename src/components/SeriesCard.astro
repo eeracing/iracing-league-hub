@@ -2,6 +2,7 @@
 import type { SeriesView } from '../types';
 interface Props { series: SeriesView }
 const { series } = Astro.props;
+const seasonName = series.config.seasonName?.trim();
 const leader = series.standings[0];
 const totalRounds = series.data.rounds.length;
 const progress = totalRounds ? Math.min(100, Math.max(0, series.currentRound / totalRounds * 100)) : 0;
@@ -12,6 +13,7 @@ const progress = totalRounds ? Math.min(100, Math.max(0, series.currentRound / t
     <div class="championship-card-identity">
       <span class="championship-card-kicker">锦标赛 <span> / {series.config.shortName}</span></span>
       <h3>{series.config.name}</h3>
+      {seasonName && <p class="championship-card-season">{seasonName}</p>}
       <p>{series.data.carClass}</p>
     </div>
   </div>

@@ -114,6 +114,7 @@ img { display: block; }
 .championship-card-kicker span { color: var(--faint); letter-spacing: 0; }
 .championship-card-identity h3 { margin: 12px 0 0; color: var(--ink); font-size: clamp(24px, 2.5vw, 36px); font-weight: 750; line-height: 1.13; letter-spacing: -.035em; }
 .championship-card-identity p { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+.championship-card-identity .championship-card-season { color: var(--accent-text); font-weight: 650; }
 .championship-card-details { margin-top: auto; padding-top: 28px; }
 .championship-card-progress-label, .championship-card-standing { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
 .championship-card-progress-label > span, .championship-card-standing span { color: var(--faint); font-size: 11px; font-weight: 650; }

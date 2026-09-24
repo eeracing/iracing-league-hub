@@ -1,6 +1,5 @@
 ---
 import type { MarkdownInstance } from 'astro';
-import { config } from '../../../config/site';
 import RaceResultsTable from '../../components/RaceResultsTable.astro';
 import ScheduleTable from '../../components/ScheduleTable.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
@@ -16,6 +15,7 @@ export function getStaticPaths() {
 
 const { seriesConfig } = Astro.props;
 const series = getSeriesView(seriesConfig);
+const seasonName = series.config.seasonName?.trim();
 const infoPath = `../../../series/${series.config.slug}/info.md`;
 const SeriesInfo = Object.hasOwn(infoModules, infoPath) ? infoModules[infoPath].Content : undefined;
 ---
@@ -26,7 +26,7 @@ const SeriesInfo = Object.hasOwn(infoModules, infoPath) ? infoModules[infoPath].
         {series.config.logo && <img class="championship-logo" src={series.config.logo} alt="" width="88" height="88" />}
         <div>
           <h1>{series.config.name}</h1>
-          <p>{series.config.seasonName ?? config.season.name} <span>·</span> {series.data.carClass}</p>
+          <p>{seasonName && <>{seasonName} <span>·</span></>}{series.data.carClass}</p>
         </div>
       </div>
     </div>

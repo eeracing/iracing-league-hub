@@ -38,7 +38,7 @@ The build output is in `dist/`. Run `npm run preview` to preview the built site 
 
 | Path | Purpose |
 | --- | --- |
-| `config/site.ts` | Site name, logo, default season, locale, display time zone, accent color, and default table columns |
+| `config/site.ts` | Site name, logo, site season, locale, display time zone, accent color, and default table columns |
 | `config/points.ts` | Shared scoring rules for finishing positions, pole position, and fastest lap |
 | `series/<slug>/config.ts` | Series name, route, scoring system, and optional season name, order, visibility, display overrides, and logo |
 | `series/<slug>/series.json` | Car class (`carClass`) and ordered schedule (`rounds`) |
@@ -50,7 +50,7 @@ Each series `config.ts` must export a default configuration with `id`, `name`, `
 
 Set `site.timeZone` in `config/site.ts` (for example, `Pacific/Auckland`) to display schedule dates consistently across builds. Keep `date` values in `series.json` as ISO 8601 timestamps with `Z` or an explicit UTC offset. Rebuild the site after changing the configuration.
 
-Set `seasonName` in a series configuration to override the default season name on that series page; the home page heading and footer keep the site-wide season name. Use numeric `order` to sort series on the home page and in navigation, with lower values first. Its default is `0`, and ties use directory path order. Set `visible: false` to remove a series from the home page cards, latest results, upcoming races, and navigation; series are visible by default. Hidden series and result pages are still generated and remain accessible through direct links.
+Set `seasonName` in a series configuration to show it on that series' home page card and series page. If omitted or blank, no season name appears for that series. The home page heading and footer use the independent site-wide season name. Use numeric `order` to sort series on the home page and in navigation, with lower values first. Its default is `0`, and ties use directory path order. Set `visible: false` to remove a series from the home page cards, latest results, upcoming races, and navigation; series are visible by default. Hidden series and result pages are still generated and remain accessible through direct links.
 
 Put series logos in `public/series/` and reference them with a site-root path, such as `logo: '/series/demo-gt3.svg'`. A logo appears in the home page series list and at the top of the series page; if none is configured, text is shown instead. The main navigation always uses text.
 
