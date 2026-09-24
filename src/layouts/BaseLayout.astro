@@ -10,9 +10,9 @@ interface Props {
 
 const {
   title,
-  description = `${config.site.name} — ${config.site.tagline}`,
+  description = `${config.site.name} - ${config.site.tagline}`,
 } = Astro.props;
-const pageTitle = title ? `${title} — ${config.site.name}` : `${config.site.name} — ${config.site.tagline}`;
+const pageTitle = title ? `${title} - ${config.site.name}` : `${config.site.name} - ${config.site.tagline}`;
 ---
 
 <!doctype html>
