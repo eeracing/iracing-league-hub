@@ -73,7 +73,7 @@ img { display: block; }
 .brand img { width: 36px; height: 36px; }
 .desktop-nav { display: flex; min-width: 0; align-self: stretch; gap: 30px; margin-left: auto; overflow-x: auto; }
 .desktop-nav a { position: relative; display: grid; place-items: center; color: var(--muted); font-size: 13px; font-weight: 600; white-space: nowrap; transition: color 180ms ease; }
-.desktop-nav a::after { position: absolute; content: ''; right: 0; bottom: -1px; left: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
+.desktop-nav a::after { position: absolute; content: ''; right: 0; bottom: 0; left: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
 .desktop-nav a:hover, .desktop-nav a.active { color: var(--ink); }
 .desktop-nav a:hover::after, .desktop-nav a.active::after { transform: scaleX(1); }
 .mobile-nav { display: none; }
