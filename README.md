@@ -7,6 +7,7 @@ LeagueHub is a ready-to-use website template for iRacing leagues. Built with Ast
 The template includes:
 
 - **League home page:** Shows series, recent results, and upcoming races.
+- **Sponsors:** Shows configurable sponsor logos and links on the home page.
 - **Series pages:** Show schedules, championship standings, the latest race results, and optional series information.
 - **Race result pages:** Show race, qualifying, and practice results, including pole position and fastest lap data.
 - **Automatic points calculation:** Applies configurable scoring rules and supports position penalties, points deductions, and disqualifications.
@@ -39,6 +40,7 @@ The build output is in `dist/`. Run `npm run preview` to preview the built site 
 | Path | Purpose |
 | --- | --- |
 | `config/site.ts` | Site name, logo, site season, locale, display time zone, accent color, and default table columns |
+| `config/sponsors.ts` | Home page sponsor names, logos, optional links, and display order |
 | `config/points.ts` | Shared scoring rules for finishing positions, pole position, and fastest lap |
 | `series/<slug>/config.ts` | Series name, route, scoring system, and optional season name, order, visibility, display overrides, and logo |
 | `series/<slug>/series.json` | Car class (`carClass`) and ordered schedule (`rounds`) |
@@ -53,6 +55,8 @@ Set `site.timeZone` in `config/site.ts` (for example, `Pacific/Auckland`) to dis
 Set `seasonName` in a series configuration to show it on that series' home page card and series page. If omitted or blank, no season name appears for that series. The home page heading and footer use the independent site-wide season name. Use numeric `order` to sort series on the home page and in navigation, with lower values first. Its default is `0`, and ties use directory path order. Set `visible: false` to remove a series from the home page cards, latest results, upcoming races, and navigation; series are visible by default. Hidden series and result pages are still generated and remain accessible through direct links.
 
 Put series logos in `public/series/` and reference them with a site-root path, such as `logo: '/series/demo-gt3.svg'`. A logo appears in the home page series list and at the top of the series page; if none is configured, text is shown instead. The main navigation always uses text.
+
+The `sponsors` array in `config/sponsors.ts` controls the home page partner section. Each entry needs `name` and `logo`; `url` and numeric `order` are optional (lower values appear first). Put logo files in `public/sponsors/` and reference them with paths such as `/sponsors/example.svg`. Cards with a URL are clickable; an empty array hides the entire section. Replace the three `DEMO` entries and logos before publishing your league site.
 
 Use `info.md` for the league's purpose, entry requirements, format, cars, prizes, broadcasts, and rules. When the file exists, the series page displays a “Series information” section and a link to it in the page navigation. Scoring rules and other conditions used in calculations must still be defined in structured configuration rather than only in prose.
 

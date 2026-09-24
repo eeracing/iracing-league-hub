@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 100" role="img" aria-labelledby="title">
+  <title id="title">DEMO Grid</title>
+  <path d="M26 27h18v18H26zm22 0h18v18H48zM26 49h18v18H26zm22 0h18v18H48z" fill="#1747d1"/>
+  <path d="M48 27h18v18H48zM26 49h18v18H26z" fill="#9bb0ed"/>
+  <text x="85" y="57" fill="#1b2334" font-family="Arial,sans-serif" font-size="29" font-weight="800">GRID</text>
+  <text x="86" y="73" fill="#6c7380" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="3">DEMO</text>
+</svg>

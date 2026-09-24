@@ -2,6 +2,7 @@
 import { config } from '../../config/site';
 import SeriesCard from '../components/SeriesCard.astro';
 import SectionHeading from '../components/SectionHeading.astro';
+import Sponsors from '../components/Sponsors.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getVisibleSeries } from '../lib/data';
 import { formatDate } from '../lib/format';
@@ -52,4 +53,5 @@ const nextRaces = seriesList
       </a>) : <p class="empty-state">目前没有已安排的后续比赛。</p>}
     </div>
   </section>
+  <Sponsors />
 </BaseLayout>
