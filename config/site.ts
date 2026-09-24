@@ -14,6 +14,7 @@ export const config = {
     logo: '/logo.svg',
     accent: '#1747d1',
     locale: 'zh-CN',
+    timeZone: 'Pacific/Auckland',
   },
   season: {
     name: '2026 年第 1 赛季',

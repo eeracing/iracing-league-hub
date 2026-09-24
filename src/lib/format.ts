@@ -6,5 +6,6 @@ export function formatDate(date: string, options: Intl.DateTimeFormatOptions = {
     month: 'short',
     year: 'numeric',
     ...options,
+    timeZone: config.site.timeZone,
   }).format(new Date(date));
 }

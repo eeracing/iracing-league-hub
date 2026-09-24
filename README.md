@@ -38,15 +38,19 @@ The build output is in `dist/`. Run `npm run preview` to preview the built site 
 
 | Path | Purpose |
 | --- | --- |
-| `config/site.ts` | Site name, logo, season, locale, accent color, and default table columns |
+| `config/site.ts` | Site name, logo, default season, locale, display time zone, accent color, and default table columns |
 | `config/points.ts` | Shared scoring rules for finishing positions, pole position, and fastest lap |
-| `series/<slug>/config.ts` | Series name, route, scoring system, and optional display overrides and logo |
+| `series/<slug>/config.ts` | Series name, route, scoring system, and optional season name, order, visibility, display overrides, and logo |
 | `series/<slug>/series.json` | Car class (`carClass`) and ordered schedule (`rounds`) |
 | `series/<slug>/info.md` | Optional series introduction and rules, displayed on the site |
 | `series/<slug>/eventresult-*.json` | Unmodified iRacing race result API responses |
 | `series/<slug>/penalties/<roundId>.json` | Optional stewarding decisions for a round |
 
 Each series `config.ts` must export a default configuration with `id`, `name`, `shortName`, `slug`, and `pointsSystem`. The `slug` must match the directory name, and `pointsSystem` must reference a key in `config/points.ts`. Use `display` to override the site-wide table options. Do not enter race result rows manually in the configuration.
+
+Set `site.timeZone` in `config/site.ts` (for example, `Pacific/Auckland`) to display schedule dates consistently across builds. Keep `date` values in `series.json` as ISO 8601 timestamps with `Z` or an explicit UTC offset. Rebuild the site after changing the configuration.
+
+Set `seasonName` in a series configuration to override the default season name on that series page; the home page heading and footer keep the site-wide season name. Use numeric `order` to sort series on the home page and in navigation, with lower values first. Its default is `0`, and ties use directory path order. Set `visible: false` to remove a series from the home page cards, latest results, upcoming races, and navigation; series are visible by default. Hidden series and result pages are still generated and remain accessible through direct links.
 
 Put series logos in `public/series/` and reference them with a site-root path, such as `logo: '/series/demo-gt3.svg'`. A logo appears in the home page series list and at the top of the series page; if none is configured, text is shown instead. The main navigation always uses text.
 
@@ -90,7 +94,7 @@ Position changes and disqualifications take effect before points are calculated.
 3. Put the original `eventresult-*.json` files for completed races in the series directory and set `resultFile` on the corresponding rounds. Add `penalties/<roundId>.json` files if needed.
 4. Run `npm run build` and inspect the generated pages.
 
-`src/lib/data.ts` automatically discovers `series/*/config.ts`; pages also read an optional `info.md` from the same directory. Navigation, the home page series list, recent results, upcoming races, series pages, and result pages for completed races are generated during the build without editing global configuration.
+`src/lib/data.ts` automatically discovers `series/*/config.ts`; pages also read an optional `info.md` from the same directory. Navigation, the home page series list, recent results, and upcoming races include visible series, while series pages and result pages for completed races are generated for every series during the build.
 
 ### Remove or archive a series
 

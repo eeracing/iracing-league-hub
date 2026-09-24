@@ -1,7 +1,8 @@
 ---
 import { config } from '../../config/site';
-import { getSeriesConfigs } from '../lib/data';
+import { getVisibleSeriesConfigs } from '../lib/data';
 const pathname = Astro.url.pathname;
+const seriesList = getVisibleSeriesConfigs();
 ---
 
 <header class="site-header">
@@ -12,7 +13,7 @@ const pathname = Astro.url.pathname;
     </a>
     <nav class="desktop-nav" aria-label="赛事导航">
       <a class:list={[{ active: pathname === '/' }]} aria-current={pathname === '/' ? 'page' : undefined} href="/">总览</a>
-      {getSeriesConfigs().map((series) => (
+      {seriesList.map((series) => (
         <a class:list={[{ active: pathname.startsWith(`/racing/${series.slug}`) }]} aria-current={pathname.startsWith(`/racing/${series.slug}`) ? 'page' : undefined} href={`/racing/${series.slug}`}>
           {series.shortName || series.name}
         </a>
@@ -27,7 +28,7 @@ const pathname = Astro.url.pathname;
       <div class="mobile-nav__panel">
         <nav aria-label="手机端赛事导航">
           <a class:list={[{ active: pathname === '/' }]} aria-current={pathname === '/' ? 'page' : undefined} href="/">总览</a>
-          {getSeriesConfigs().map((series) => (
+          {seriesList.map((series) => (
             <a class:list={[{ active: pathname.startsWith(`/racing/${series.slug}`) }]} aria-current={pathname.startsWith(`/racing/${series.slug}`) ? 'page' : undefined} href={`/racing/${series.slug}`}>
               {series.shortName || series.name}
             </a>

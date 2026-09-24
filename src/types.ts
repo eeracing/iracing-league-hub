@@ -7,6 +7,9 @@ export type SeriesConfig = {
   shortName: string;
   slug: string;
   logo?: string;
+  seasonName?: string;
+  order?: number;
+  visible?: boolean;
   pointsSystem: keyof typeof pointsSystems;
   display?: Partial<DisplayOptions>;
 };

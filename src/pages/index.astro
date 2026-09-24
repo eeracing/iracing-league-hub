@@ -3,11 +3,11 @@ import { config } from '../../config/site';
 import SeriesCard from '../components/SeriesCard.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAllSeries } from '../lib/data';
+import { getVisibleSeries } from '../lib/data';
 import { formatDate } from '../lib/format';
 import { getFastestLap } from '../lib/points';
 
-const seriesList = getAllSeries();
+const seriesList = getVisibleSeries();
 const latestResults = seriesList
   .filter((series) => series.latestRace && series.latestRound)
   .sort((a, b) => new Date(b.latestRound!.date).getTime() - new Date(a.latestRound!.date).getTime());

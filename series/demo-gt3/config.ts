@@ -5,6 +5,7 @@ export default {
   name: 'DEMO · GT3 虚拟锦标赛',
   shortName: 'DEMO GT3',
   slug: 'demo-gt3',
+  seasonName: 'DEMO 2026 GT3 赛季',
   logo: '/series/demo-gt3.svg',
   pointsSystem: 'standard',
 } satisfies SeriesConfig;

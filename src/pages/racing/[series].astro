@@ -26,7 +26,7 @@ const SeriesInfo = Object.hasOwn(infoModules, infoPath) ? infoModules[infoPath].
         {series.config.logo && <img class="championship-logo" src={series.config.logo} alt="" width="88" height="88" />}
         <div>
           <h1>{series.config.name}</h1>
-          <p>{config.season.name} <span>·</span> {series.data.carClass}</p>
+          <p>{series.config.seasonName ?? config.season.name} <span>·</span> {series.data.carClass}</p>
         </div>
       </div>
     </div>

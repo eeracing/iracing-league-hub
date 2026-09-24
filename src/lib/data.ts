@@ -22,7 +22,9 @@ const penaltyModules = import.meta.glob('../../series/*/penalties/*.json', {
 
 export function getSeriesConfigs(): SeriesConfig[] {
   return Object.entries(seriesModules)
-    .sort(([a], [b]) => a.localeCompare(b))
+    .sort(([pathA, a], [pathB, b]) =>
+      (a.order ?? 0) - (b.order ?? 0) || pathA.localeCompare(pathB),
+    )
     .map(([path, series]) => {
       const folder = path.split('/').at(-2);
       if (series.slug !== folder) {
@@ -30,6 +32,10 @@ export function getSeriesConfigs(): SeriesConfig[] {
       }
       return series;
     });
+}
+
+export function getVisibleSeriesConfigs(): SeriesConfig[] {
+  return getSeriesConfigs().filter((series) => series.visible !== false);
 }
 
 function dataFile<T>(slug: string, file: string): T {
@@ -84,8 +90,8 @@ export function getSeriesView(series: SeriesConfig): SeriesView {
   };
 }
 
-export function getAllSeries(): SeriesView[] {
-  return getSeriesConfigs().map(getSeriesView);
+export function getVisibleSeries(): SeriesView[] {
+  return getVisibleSeriesConfigs().map(getSeriesView);
 }
 
 export function getRace(series: SeriesConfig, roundId: string): ScoredRace | undefined {
