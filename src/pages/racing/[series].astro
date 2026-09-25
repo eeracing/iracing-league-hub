@@ -59,8 +59,10 @@ const SeriesInfo = Object.hasOwn(infoModules, infoPath) ? infoModules[infoPath].
 
   {SeriesInfo && <section class="content-section section-muted" id="info">
     <div class="shell">
-      <SectionHeading title="赛事信息" />
-      <div class="series-info"><SeriesInfo /></div>
+      <div class="series-info-layout">
+        <SectionHeading title="赛事信息" />
+        <div class="series-info"><SeriesInfo /></div>
+      </div>
     </div>
   </section>}
 </BaseLayout>
