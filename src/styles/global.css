@@ -70,7 +70,7 @@ img { display: block; }
 .site-header { position: sticky; top: 0; z-index: 20; height: 72px; background: color-mix(in srgb, var(--page) 92%, transparent); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
 .nav-inner { height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
 .brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 800; letter-spacing: .07em; white-space: nowrap; }
-.brand img { width: 36px; height: 36px; }
+.brand img { width: 36px; height: 36px; object-fit: contain; }
 .desktop-nav { display: flex; min-width: 0; align-self: stretch; gap: 30px; margin-left: auto; overflow-x: auto; }
 .desktop-nav a { position: relative; display: grid; place-items: center; color: var(--muted); font-size: 13px; font-weight: 600; white-space: nowrap; transition: color 180ms ease; }
 .desktop-nav a::after { position: absolute; content: ''; right: 0; bottom: 0; left: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
@@ -240,7 +240,7 @@ tbody tr { transition: background .15s ease; }
 .winner-band .fastest-stat { border-top: 2px solid var(--accent); }
 .site-footer { padding: 32px 0; background: var(--page); border-top: 1px solid var(--line); }
 .footer-inner, .footer-inner > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.footer-inner img { width: 32px; height: 32px; }
+.footer-inner img { width: 32px; height: 32px; object-fit: contain; }
 .footer-inner > div span { font-size: 14px; font-weight: 750; letter-spacing: .05em; }
 .footer-inner p { color: var(--faint); font-size: 11px; }
 .footer-inner p a { color: var(--ink); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
