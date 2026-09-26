@@ -26,9 +26,10 @@ function penaltyLabel(penalty: RacePenalty): string {
 ---
 <div class="table-scroll">
   <table class="results-table">
-    <thead><tr><th class="pos">排名</th><th class="driver">车手</th><th>发车位</th><th>赛车</th><th>圈数</th><th>估算用时 / 差距</th><th>最快圈</th>{showIncidents && <th>事故次数</th>}</tr></thead>
+    <thead><tr><th class="pos">排名</th><th class="driver">车手</th><th>发车位</th><th>赛车</th><th>圈数</th><th>估算用时 / 差距</th><th>最快圈</th>{showIncidents && <th>事故次数</th>}<th class="points">积分</th></tr></thead>
     <tbody>{results.map((result) => {
       const penalties = race.penalties.filter((penalty) => penalty.driverId === result.driverId);
+      const score = race.championshipPoints.find((entry) => entry.driverId === result.driverId);
       const hasPositionPenalty = penalties.some((penalty) => penalty.type === 'position');
       return <tr class:list={{ 'has-penalty': penalties.length > 0 }}>
         <td class="pos">
@@ -49,6 +50,7 @@ function penaltyLabel(penalty: RacePenalty): string {
         <td>{result.startPosition > 0 ? result.startPosition : '—'}</td><td class="car">{result.car}</td><td>{result.laps}</td><td>{result.status === 'dnf' || result.status === 'disqualified' ? result.reasonOut : result.position === 1 ? result.time : result.gap}</td>
         <td class:list={['lap-time', { fastest: fastest?.driverId === result.driverId }]}>{result.bestLap}{fastest?.driverId === result.driverId && <span class="fl-badge">全场最快</span>}</td>
         {showIncidents && <td>{result.incidents}</td>}
+        <td class="points"><strong>{score?.points ?? 0}</strong>{score && score.customBonus > 0 && <small class="custom-bonus">额外奖励 +{score.customBonus}</small>}</td>
       </tr>;
     })}</tbody>
   </table>

@@ -115,6 +115,7 @@ export type ChampionshipPoints = {
   positionPoints: number;
   poleBonus: number;
   fastestLapBonus: number;
+  customBonus: number;
   penalty: number;
   points: number;
 };

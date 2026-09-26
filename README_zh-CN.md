@@ -43,7 +43,7 @@ npm run build
 | --- | --- |
 | `config/site.ts` | 站点名称、Logo、全站赛季、语言区域、展示时区、重点色及表格默认展示列 |
 | `config/sponsors.ts` | 全站合作伙伴的名称、Logo、可选链接及显示顺序 |
-| `config/points.ts` | 共享的名次积分、杆位和最快圈奖励规则 |
+| `config/points.ts` | 共享的名次积分、杆位、最快圈及可选自定义奖励规则 |
 | `series/<slug>/config.ts` | 系列赛名称、路由、积分规则及可选的赛季名称、展示顺序、可见状态、展示覆盖、Logo 和证书范围 |
 | `series/<slug>/series.json` | 车辆组别 `carClass` 与按顺序排列的赛程 `rounds` |
 | `series/<slug>/info.md` | 可选的赛事介绍和规则说明，仅用于展示 |
@@ -51,6 +51,8 @@ npm run build
 | `series/<slug>/penalties/<roundId>.json` | 可选的该轮赛事仲裁决定 |
 
 系列赛的 `config.ts` 默认导出配置，包含 `id`、`name`、`shortName`、`slug` 和 `pointsSystem`；`slug` 必须与目录名相同，`pointsSystem` 必须引用 `config/points.ts` 中的键。可用 `display` 覆盖全站表格展示选项。比赛结果行不应手工写入配置。
+
+`config/points.ts` 中的 `custom` 是特殊积分示例：P1–P10 分别得 32、24、18、14、12、10、8、6、4、2 分；杆位和最快圈各得 1 分；名次提升最多和事故点最少的车手各得 1 分；P11 起（含 P11）完赛车手各得 1 分。两项单人奖励并列时由正式名次更靠前者获得，名次提升须大于零。特殊奖励以处罚后的正式名次计算，取消资格者得零分。要启用该规则，在对应系列赛的 `config.ts` 中设置 `pointsSystem: 'custom'`。其他特殊规则可通过新增积分方案的 `customBonus(race)` 实现，返回以车手 ID 为键、额外分数为值的对象。
 
 在 `config/site.ts` 中设置 `site.timeZone`（如 `Pacific/Auckland`），所有页面都按该时区显示赛程日期；`series.json` 中的 `date` 继续使用带 `Z` 或时区偏移量的 ISO 8601 时间戳。修改配置后须重新构建站点。
 

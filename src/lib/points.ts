@@ -16,6 +16,7 @@ export function getFastestLap(race?: Race): RaceResult | undefined {
 export function calculateRacePoints(race: OfficialRace, series: SeriesConfig): ScoredRace {
   const rules = pointsSystems[series.pointsSystem];
   const fastest = getFastestLap(race);
+  const customBonuses = 'customBonus' in rules ? rules.customBonus(race) : {};
 
   const championshipPoints = race.results.map((result) => {
     const isDisqualified = result.status === 'disqualified';
@@ -24,6 +25,7 @@ export function calculateRacePoints(race: OfficialRace, series: SeriesConfig): S
     const fastestLapBonus = !isDisqualified && fastest?.driverId === result.driverId
       ? rules.fastestLapBonus
       : 0;
+    const customBonus = isDisqualified ? 0 : (customBonuses[result.driverId] ?? 0);
     const penalty = race.penalties
       .reduce((total, item) => item.type === 'points' && item.driverId === result.driverId
         ? total + item.points
@@ -34,8 +36,9 @@ export function calculateRacePoints(race: OfficialRace, series: SeriesConfig): S
       positionPoints,
       poleBonus,
       fastestLapBonus,
+      customBonus,
       penalty,
-      points: isDisqualified ? 0 : positionPoints + poleBonus + fastestLapBonus - penalty,
+      points: isDisqualified ? 0 : positionPoints + poleBonus + fastestLapBonus + customBonus - penalty,
     };
   });
 
