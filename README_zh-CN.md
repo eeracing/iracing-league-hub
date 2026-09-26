@@ -35,6 +35,8 @@ npm run build
 
 构建产物位于 `dist/`。可用 `npm run preview` 在本地预览构建结果。`npm run build` 本身也会先执行 Astro 检查。
 
+发布到其他域名时，只需修改 `astro.config.mjs` 中的 `site`。页面 canonical、站点地图和 `robots.txt` 会使用同一个地址生成。
+
 ## 数据与配置放在哪里
 
 | 路径 | 用途 |

@@ -25,6 +25,7 @@ const timedSession = sessionKind === 'race' ? undefined : sessions[sessionKind];
 const fastest = getFastestLap(race);
 const certificateDriverIds = certificateResults(series.config, race).map((result) => result.driverId);
 const sessionName = sessionKind === 'race' ? '正赛' : sessionKind === 'qualifying' ? '排位赛' : '练习赛';
+const description = `${series.config.name} · 第 ${round.round} 轮「${round.name}」${sessionName}结果，包含车手名次与圈速。比赛赛道：${round.track}。`;
 const resultUrl = `/racing/${series.config.slug}/results/${round.id}`;
 const tabs = [
   { kind: 'race', label: '正赛', href: resultUrl },
@@ -32,7 +33,7 @@ const tabs = [
   { kind: 'practice', label: '练习赛', href: `${resultUrl}/practice` },
 ] as const;
 ---
-<BaseLayout title={sessionKind === 'race' ? `${round.name} 比赛结果` : `${round.name} ${sessionName}结果`}>
+<BaseLayout title={sessionKind === 'race' ? `${round.name} 比赛结果` : `${round.name} ${sessionName}结果`} description={description}>
   <section class="result-hero">
     <div class="shell">
       <a class="back-link" href={`/racing/${series.config.slug}`}>← {series.config.name}</a>

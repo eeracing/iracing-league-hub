@@ -19,7 +19,7 @@ const seasonName = series.config.seasonName?.trim();
 const infoPath = `../../../series/${series.config.slug}/info.md`;
 const SeriesInfo = Object.hasOwn(infoModules, infoPath) ? infoModules[infoPath].Content : undefined;
 ---
-<BaseLayout title={series.config.name} description={`${series.config.name} 的锦标赛积分榜、比赛结果与赛程。`}>
+<BaseLayout title={series.config.name} description={`${series.config.name}锦标赛积分榜、比赛结果与赛程。`}>
   <section class="page-header championship-header">
     <div class="shell">
       <div class="championship-heading">

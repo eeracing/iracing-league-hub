@@ -7,13 +7,16 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  canonical?: boolean;
 }
 
 const {
   title,
   description = `${config.site.name} - ${config.site.tagline}`,
+  canonical = true,
 } = Astro.props;
 const pageTitle = title ? `${title} - ${config.site.name}` : `${config.site.name} - ${config.site.tagline}`;
+const canonicalUrl = canonical && Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 ---
 
 <!doctype html>
@@ -22,6 +25,7 @@ const pageTitle = title ? `${title} - ${config.site.name}` : `${config.site.name
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <meta name="theme-color" content="#f3f2ee" />
     <meta name="color-scheme" content="light dark" />
     <script is:inline>

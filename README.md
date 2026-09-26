@@ -35,6 +35,8 @@ npm run build
 
 The build output is in `dist/`. Run `npm run preview` to preview the built site locally. `npm run build` also runs the Astro checks before building.
 
+When publishing at a different domain, change only `site` in `astro.config.mjs`. Page canonical URLs, the sitemap, and `robots.txt` use that same address.
+
 ## Data and configuration
 
 | Path | Purpose |
