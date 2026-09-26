@@ -15,6 +15,11 @@
   "dependencies": {
     "@astrojs/check": "^0.9.10",
     "astro": "^7.3.3",
+    "pdfkit": "^0.20.2",
+    "sharp": "^0.35.4",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/pdfkit": "^0.17.6"
   }
 }

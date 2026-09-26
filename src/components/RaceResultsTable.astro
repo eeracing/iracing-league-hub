@@ -1,10 +1,12 @@
 ---
 import { getFastestLap } from '../lib/points';
+import { certificateUrl } from '../lib/certificates';
 import type { RacePenalty, ScoredRace } from '../types';
-interface Props { race: ScoredRace; showIncidents?: boolean; limit?: number }
-const { race, showIncidents = false, limit } = Astro.props;
+interface Props { race: ScoredRace; showIncidents?: boolean; limit?: number; certificateDriverIds?: string[]; seriesSlug?: string }
+const { race, showIncidents = false, limit, certificateDriverIds = [], seriesSlug } = Astro.props;
 const fastest = getFastestLap(race);
 const results = limit ? race.results.slice(0, limit) : race.results;
+const certificateIds = new Set(certificateDriverIds);
 
 function penaltyValue(penalty: RacePenalty): string {
   if (penalty.type === 'position') {
@@ -32,6 +34,7 @@ function penaltyLabel(penalty: RacePenalty): string {
         <td class="pos">
           <strong>{result.status === 'disqualified' ? '取消资格' : result.position > 0 ? result.position : '—'}</strong>
           {hasPositionPenalty && <small class="position-adjustment">原第 {result.finishPosition} 名</small>}
+          {seriesSlug && certificateIds.has(result.driverId) && <a class="certificate-link" href={certificateUrl(seriesSlug, race.roundId, result.driverId)} target="_blank" rel="noopener" aria-label={`在新标签页查看${result.driver}第${result.position}名证书 PDF`}>查看证书</a>}
         </td>
         <td class="driver">
           <div><span class="car-number">#{result.carNumber}</span><strong>{result.driver}</strong></div>

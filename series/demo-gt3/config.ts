@@ -8,4 +8,5 @@ export default {
   seasonName: 'DEMO 2026 GT3 赛季',
   logo: '/series/demo-gt3.svg',
   pointsSystem: 'standard',
+  certificates: { top: 5 },
 } satisfies SeriesConfig;

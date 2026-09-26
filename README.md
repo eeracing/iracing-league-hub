@@ -42,7 +42,7 @@ The build output is in `dist/`. Run `npm run preview` to preview the built site 
 | `config/site.ts` | Site name, logo, site season, locale, display time zone, accent color, and default table columns |
 | `config/sponsors.ts` | Site-wide sponsor names, logos, optional links, and display order |
 | `config/points.ts` | Shared scoring rules for finishing positions, pole position, and fastest lap |
-| `series/<slug>/config.ts` | Series name, route, scoring system, and optional season name, order, visibility, display overrides, and logo |
+| `series/<slug>/config.ts` | Series name, route, scoring system, and optional season name, order, visibility, display overrides, logo, and certificate range |
 | `series/<slug>/series.json` | Car class (`carClass`) and ordered schedule (`rounds`) |
 | `series/<slug>/info.md` | Optional series introduction and rules, displayed on the site |
 | `series/<slug>/eventresult-*.json` | Unmodified iRacing race result API responses |
@@ -82,6 +82,18 @@ Each round in `series.json` can reference an original result file in the same di
 ```
 
 Leave out `resultFile` for rounds that have not taken place. The first scheduled round without a result is treated as the next race. After adding or replacing a result file, rebuild the site to update the official results, standings, series progress, and home page automatically.
+
+### Race position certificates
+
+Set `certificates` in each series `config.ts`:
+
+```ts
+certificates: 'off',       // Disabled; also the default when omitted
+certificates: { top: 5 },  // Top N finishers, for any positive integer N
+certificates: 'all',       // Every driver with an official position
+```
+
+The demo GT3 series enables certificates for the top five. Public certificate links appear beneath eligible positions on race result pages only. They open PDFs in a new browser tab, where the browser's PDF viewer can download them. Eligibility uses positions after stewarding; disqualified drivers and drivers without an official position receive no certificate. Certificates use `site.accent`, the series logo when available, and otherwise the site logo. Rebuild after changing results or penalties to update the generated PDFs. The bundled Noto Sans CJK font and its license are in `assets/fonts/`.
 
 ### Penalty files
 

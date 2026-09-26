@@ -42,7 +42,7 @@ npm run build
 | `config/site.ts` | 站点名称、Logo、全站赛季、语言区域、展示时区、重点色及表格默认展示列 |
 | `config/sponsors.ts` | 全站合作伙伴的名称、Logo、可选链接及显示顺序 |
 | `config/points.ts` | 共享的名次积分、杆位和最快圈奖励规则 |
-| `series/<slug>/config.ts` | 系列赛名称、路由、积分规则及可选的赛季名称、展示顺序、可见状态、展示覆盖和 Logo |
+| `series/<slug>/config.ts` | 系列赛名称、路由、积分规则及可选的赛季名称、展示顺序、可见状态、展示覆盖、Logo 和证书范围 |
 | `series/<slug>/series.json` | 车辆组别 `carClass` 与按顺序排列的赛程 `rounds` |
 | `series/<slug>/info.md` | 可选的赛事介绍和规则说明，仅用于展示 |
 | `series/<slug>/eventresult-*.json` | 未经修改的 iRacing 比赛结果 API 响应 |
@@ -82,6 +82,18 @@ Logo 资源放在 `public/series/`，在系列赛配置中使用站点根路径�
 ```
 
 未举行的轮次不要填写 `resultFile`；赛程中第一轮没有结果的比赛会被视为下一场比赛。替换或增加结果文件后，重新构建即可更新正式成绩、积分榜、赛事进度和首页内容，无需手工整理结果。
+
+### 分站名次证书
+
+在每个系列赛的 `config.ts` 中使用 `certificates` 设置证书范围：
+
+```ts
+certificates: 'off',       // 关闭；不填写时也默认关闭
+certificates: { top: 5 },  // 前 N 名；N 可以是任意正整数
+certificates: 'all',       // 所有取得正式名次的车手
+```
+
+示例 GT3 赛事设置为前 5 名。仅正赛结果页会在符合条件的名次下方显示公开的“查看证书”链接；点击后在新标签页打开 PDF，可通过浏览器的 PDF 工具下载。按处罚后的正式名次判断，取消资格或没有正式名次的车手不会获得证书。PDF 使用 `config/site.ts` 的 `site.accent` 重点色，优先放入该系列赛的 `logo`，没有时使用 `site.logo`。每次构建自动生成对应 PDF；更新比赛结果或处罚文件后重新运行 `npm run build` 即可。生成 PDF 使用的 Noto Sans CJK 字体及其许可见 `assets/fonts/`。
 
 ### 处罚文件
 

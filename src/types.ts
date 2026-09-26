@@ -11,6 +11,7 @@ export type SeriesConfig = {
   order?: number;
   visible?: boolean;
   pointsSystem: keyof typeof pointsSystems;
+  certificates?: 'off' | 'all' | { top: number };
   display?: Partial<DisplayOptions>;
 };
 

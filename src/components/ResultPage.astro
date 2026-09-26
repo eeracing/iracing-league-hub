@@ -5,6 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSeriesView } from '../lib/data';
 import { formatDate } from '../lib/format';
 import { getFastestLap } from '../lib/points';
+import { certificateResults } from '../lib/certificates';
 import type { SeriesConfig } from '../types';
 
 type SessionKind = 'race' | 'qualifying' | 'practice';
@@ -22,6 +23,7 @@ const round = series.data.rounds.find((item) => item.id === roundId)!;
 const sessions = series.eventSessions[roundId];
 const timedSession = sessionKind === 'race' ? undefined : sessions[sessionKind];
 const fastest = getFastestLap(race);
+const certificateDriverIds = certificateResults(series.config, race).map((result) => result.driverId);
 const sessionName = sessionKind === 'race' ? '正赛' : sessionKind === 'qualifying' ? '排位赛' : '练习赛';
 const resultUrl = `/racing/${series.config.slug}/results/${round.id}`;
 const tabs = [
@@ -59,7 +61,7 @@ const tabs = [
   <section class="content-section shell">
     <header class="section-heading"><div><p class="eyebrow">{sessionKind === 'race' ? '正式成绩' : '场次成绩'}</p><h2>{sessionKind === 'race' ? '比赛结果' : `${sessionName}结果`}</h2></div></header>
     {sessionKind === 'race'
-      ? <RaceResultsTable race={race} showIncidents={series.display.incidents} />
+      ? <RaceResultsTable race={race} showIncidents={series.display.incidents} certificateDriverIds={certificateDriverIds} seriesSlug={series.config.slug} />
       : timedSession && <TimedSessionTable session={timedSession} gapLabel={sessionKind === 'qualifying' ? '与杆位差距' : '与全场最快差距'} />}
   </section>
 </BaseLayout>
